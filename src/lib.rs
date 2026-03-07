@@ -1,6 +1,5 @@
 #![doc = include_str!("../README.md")]
 #![no_std]
-#![cfg_attr(docsrs, feature(doc_cfg))]
 
 #[macro_use]
 mod macros;
@@ -22,7 +21,7 @@ trait Sealed {}
 
 /// Maps a non-atomic primitive type to its corresponding atomic type.
 ///
-/// This mirrors the unstable [`std::sync::atomic::AtomicPrimitive`] trait.
+/// This mirrors the unstable [`core::sync::atomic::AtomicPrimitive`] trait.
 /// Once that trait is stabilized, this can be deprecated in favor of the std
 /// version.
 ///
@@ -37,7 +36,7 @@ trait Sealed {}
 /// }
 /// ```
 ///
-/// [`std::sync::atomic::AtomicPrimitive`]: https://doc.rust-lang.org/std/sync/atomic/trait.AtomicPrimitive.html
+/// [`core::sync::atomic::AtomicPrimitive`]: https://doc.rust-lang.org/core/sync/atomic/trait.AtomicPrimitive.html
 pub trait AtomicPrimitive: Sized + Copy + Send + Sync {
     /// The atomic type corresponding to this primitive type.
     type Atomic: PrimitiveAtomic<Value = Self>;
@@ -51,9 +50,9 @@ pub trait AtomicPrimitive: Sized + Copy + Send + Sync {
 
 /// Type alias for the atomic version of a primitive type.
 ///
-/// This mirrors the unstable [`std::sync::atomic::Atomic`] type alias.
+/// This mirrors the unstable [`core::sync::atomic::Atomic`] type alias.
 ///
-/// [`std::sync::atomic::Atomic`]: https://doc.rust-lang.org/std/sync/atomic/type.Atomic.html
+/// [`core::sync::atomic::Atomic`]: https://doc.rust-lang.org/core/sync/atomic/type.Atomic.html
 pub type Atomic<T> = <T as AtomicPrimitive>::Atomic;
 
 macro_rules! impl_atomic_primitive {

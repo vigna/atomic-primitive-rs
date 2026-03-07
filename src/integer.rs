@@ -25,12 +25,10 @@ pub trait PrimitiveAtomicInteger: PrimitiveAtomic {
     /// Subtracts from the current value, returning the previous value.
     fn fetch_sub(&self, val: Self::Value, order: Ordering) -> Self::Value;
 
-    /// Fetches the value, and applies a function that returns the maximum of
-    /// the current value and the argument `val`. Returns the previous value.
+    /// Stores the maximum of the current value and `val`. Returns the previous value.
     fn fetch_max(&self, val: Self::Value, order: Ordering) -> Self::Value;
 
-    /// Fetches the value, and applies a function that returns the minimum of
-    /// the current value and the argument `val`. Returns the previous value.
+    /// Stores the minimum of the current value and `val`. Returns the previous value.
     fn fetch_min(&self, val: Self::Value, order: Ordering) -> Self::Value;
 }
 

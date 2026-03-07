@@ -30,7 +30,11 @@ use crate::Sealed;
 #[expect(private_bounds)]
 pub trait PrimitiveAtomic: Sealed + Sized + Send + Sync {
     /// The non-atomic type corresponding to this atomic type.
-    type Value: Copy + Send + Sync;
+    ///
+    /// The [`AtomicPrimitive`](crate::AtomicPrimitive) bound is the only
+    /// addition beyond standard library functionality, enabling bidirectional
+    /// navigation between atomic and non-atomic types.
+    type Value: Copy + Send + Sync + crate::AtomicPrimitive<Atomic = Self>;
 
     /// Creates a new atomic value.
     fn new(value: Self::Value) -> Self;

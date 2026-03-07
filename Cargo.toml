@@ -4,11 +4,21 @@ version = "0.1.0"
 edition = "2024"
 description = "Traits for primitive atomic types"
 license = "MIT OR Apache-2.0 OR LGPL-2.1-or-later"
+repository = "https://github.com/vigna/atomic-primitive-rs"
 readme = "README.md"
 authors = [ "Sebastiano Vigna <sebastiano.vigna@unimi.it>" ]
 keywords = ["generic", "atomic", "primitive"]
-categories = ["no-std", "rust-patterns", "traits"]
+categories = ["no-std", "concurrency"]
 rust-version = "1.85"
 
-[features]
-default = []
+[lints.rust]
+missing-docs = "deny"
+private-bounds = "deny"
+private-interfaces = "deny"
+unconditional-recursion = "deny"
+unnameable-types = "deny"
+unreachable-pub = "deny"
+
+[lints.rustdoc]
+broken-intra-doc-links = "deny"
+private-intra-doc-links = "deny"
