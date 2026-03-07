@@ -33,16 +33,22 @@ expansion in a non-breaking way.
 
 This crate is currently tested for Rust 1.85 and greater.
 
-[`AtomicBool`]: core::sync::atomic::AtomicBool
-[`AtomicU8`]: core::sync::atomic::AtomicU8
-[`AtomicU16`]: core::sync::atomic::AtomicU16
-[`AtomicU32`]: core::sync::atomic::AtomicU32
-[`AtomicU64`]: core::sync::atomic::AtomicU64
-[`AtomicUsize`]: core::sync::atomic::AtomicUsize
-[`AtomicI8`]: core::sync::atomic::AtomicI8
-[`AtomicI16`]: core::sync::atomic::AtomicI16
-[`AtomicI32`]: core::sync::atomic::AtomicI32
-[`AtomicI64`]: core::sync::atomic::AtomicI64
-[`AtomicIsize`]: core::sync::atomic::AtomicIsize
+[`PrimitiveAtomic`]: https://docs.rs/atomic-primitive/latest/atomic_primitive/trait.PrimitiveAtomic.html
+[`PrimitiveAtomic::Value`]: https://docs.rs/atomic-primitive/latest/atomic_primitive/trait.PrimitiveAtomic.html#associatedtype.Value
+[`PrimitiveAtomicInteger`]: https://docs.rs/atomic-primitive/latest/atomic_primitive/trait.PrimitiveAtomicInteger.html
+[`PrimitiveAtomicSigned`]: https://docs.rs/atomic-primitive/latest/atomic_primitive/trait.PrimitiveAtomicSigned.html
+[`PrimitiveAtomicUnsigned`]: https://docs.rs/atomic-primitive/latest/atomic_primitive/trait.PrimitiveAtomicUnsigned.html
+[`AtomicPrimitive`]: https://docs.rs/atomic-primitive/latest/atomic_primitive/trait.AtomicPrimitive.html
+[`AtomicBool`]: https://doc.rust-lang.org/std/sync/atomic/struct.AtomicBool.html
+[`AtomicU8`]: https://doc.rust-lang.org/std/sync/atomic/struct.AtomicU8.html
+[`AtomicU16`]: https://doc.rust-lang.org/std/sync/atomic/struct.AtomicU16.html
+[`AtomicU32`]: https://doc.rust-lang.org/std/sync/atomic/struct.AtomicU32.html
+[`AtomicU64`]: https://doc.rust-lang.org/std/sync/atomic/struct.AtomicU64.html
+[`AtomicUsize`]: https://doc.rust-lang.org/std/sync/atomic/struct.AtomicUsize.html
+[`AtomicI8`]: https://doc.rust-lang.org/std/sync/atomic/struct.AtomicI8.html
+[`AtomicI16`]: https://doc.rust-lang.org/std/sync/atomic/struct.AtomicI16.html
+[`AtomicI32`]: https://doc.rust-lang.org/std/sync/atomic/struct.AtomicI32.html
+[`AtomicI64`]: https://doc.rust-lang.org/std/sync/atomic/struct.AtomicI64.html
+[`AtomicIsize`]: https://doc.rust-lang.org/std/sync/atomic/struct.AtomicIsize.html
 [sealed]: https://rust-lang.github.io/api-guidelines/future-proofing.html#sealed-traits-protect-against-downstream-implementations-c-sealed
 [`core::sync::atomic::AtomicPrimitive`]: https://doc.rust-lang.org/core/sync/atomic/trait.AtomicPrimitive.html
