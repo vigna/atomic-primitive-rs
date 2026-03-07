@@ -3,7 +3,7 @@
 [![crate](https://img.shields.io/crates/v/atomic-primitive.svg)](https://crates.io/crates/atomic-primitive)
 [![documentation](https://docs.rs/atomic-primitive/badge.svg)](https://docs.rs/atomic-primitive)
 [![minimum rustc 1.85](https://img.shields.io/badge/rustc-1.85+-red.svg)](https://rust-lang.github.io/rfcs/2495-min-rust-version.html)
-[![build status](https://github.com/vigna/atomic-primitive-rs/workflows/master/badge.svg)](https://github.com/vigna/atomic-primitive-rs/actions)
+[![build status](https://github.com/vigna/atomic-primitive-rs/workflows/ci/badge.svg)](https://github.com/vigna/atomic-primitive-rs/actions)
 
 Traits for primitive atomic types in Rust.
 
