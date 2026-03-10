@@ -110,53 +110,26 @@ macro_rules! impl_primitive_atomic {
         impl PrimitiveAtomic for $Atomic {
             type Value = $Value;
 
-            #[inline]
-            fn new(value: $Value) -> Self {
-                <$Atomic>::new(value)
-            }
-
-            #[inline]
-            fn get_mut(&mut self) -> &mut $Value {
-                <$Atomic>::get_mut(self)
-            }
-
             forward! {
+                fn new(value: $Value) -> Self;
+                fn get_mut(&mut self) -> &mut $Value;
                 fn into_inner(self) -> $Value;
-            }
-
-            forward! {
                 fn load(&self, order: Ordering) -> $Value;
-                fn swap(&self, value: $Value, order: Ordering) -> $Value;
-                fn as_ptr(&self) -> *mut $Value;
             }
 
+            // store: cannot use forward! (no return type)
             #[inline]
             fn store(&self, value: $Value, order: Ordering) {
                 <$Atomic>::store(self, value, order)
             }
 
-            #[inline]
-            fn compare_exchange(
-                &self,
-                current: $Value,
-                new: $Value,
-                success: Ordering,
-                failure: Ordering,
-            ) -> Result<$Value, $Value> {
-                <$Atomic>::compare_exchange(self, current, new, success, failure)
+            forward! {
+                fn swap(&self, value: $Value, order: Ordering) -> $Value;
+                fn compare_exchange(&self, current: $Value, new: $Value, success: Ordering, failure: Ordering) -> Result<$Value, $Value>;
+                fn compare_exchange_weak(&self, current: $Value, new: $Value, success: Ordering, failure: Ordering) -> Result<$Value, $Value>;
             }
 
-            #[inline]
-            fn compare_exchange_weak(
-                &self,
-                current: $Value,
-                new: $Value,
-                success: Ordering,
-                failure: Ordering,
-            ) -> Result<$Value, $Value> {
-                <$Atomic>::compare_exchange_weak(self, current, new, success, failure)
-            }
-
+            // fetch_update: cannot use forward! (generic parameter)
             #[inline]
             fn fetch_update<F>(
                 &self,
@@ -175,6 +148,7 @@ macro_rules! impl_primitive_atomic {
                 fn fetch_nand(&self, val: $Value, order: Ordering) -> $Value;
                 fn fetch_or(&self, val: $Value, order: Ordering) -> $Value;
                 fn fetch_xor(&self, val: $Value, order: Ordering) -> $Value;
+                fn as_ptr(&self) -> *mut $Value;
             }
         }
     };

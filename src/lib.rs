@@ -29,7 +29,6 @@ trait Sealed {}
 ///
 /// ```
 /// use atomic_primitive::{AtomicPrimitive, PrimitiveAtomic};
-/// use core::sync::atomic::Ordering;
 ///
 /// fn make_atomic<T: AtomicPrimitive>(val: T) -> T::Atomic {
 ///     T::Atomic::new(val)
@@ -39,6 +38,10 @@ trait Sealed {}
 /// [`core::sync::atomic::AtomicPrimitive`]: https://doc.rust-lang.org/core/sync/atomic/trait.AtomicPrimitive.html
 pub trait AtomicPrimitive: Sized + Copy + Send + Sync {
     /// The atomic type corresponding to this primitive type.
+    ///
+    /// Note that the bound on `Value` is not imposed in the unstable
+    /// `core::sync::atomic::AtomicPrimitive` trait, but it is useful
+    /// to round-trip between the primitive and atomic types.
     type Atomic: PrimitiveAtomic<Value = Self>;
 
     /// Converts this value to its atomic counterpart.

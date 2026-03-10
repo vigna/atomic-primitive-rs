@@ -21,9 +21,13 @@ Additionally, [`AtomicPrimitive`] maps non-atomic primitive types to their
 atomic counterparts, mirroring the unstable
 [`core::sync::atomic::AtomicPrimitive`] trait.
 
+The goal of this crate is to provide the same functionality as the [`num-primitive`]
+crate for atomic types.
+
 It is not a goal of this crate to _add_ any functionality to the atomic types,
 only to expose what is already available in the standard library in a more
 generic way, and make a few experimental traits and types available on stable.
+
 The only addition is an [`AtomicPrimitive`] bound on [`PrimitiveAtomic::Value`],
 which enables bidirectional navigation between atomic and non-atomic types.
 The traits are also [sealed] against downstream implementations to allow
@@ -52,3 +56,4 @@ This crate is currently tested for Rust 1.85 and greater.
 [`AtomicIsize`]: https://doc.rust-lang.org/std/sync/atomic/struct.AtomicIsize.html
 [sealed]: https://rust-lang.github.io/api-guidelines/future-proofing.html#sealed-traits-protect-against-downstream-implementations-c-sealed
 [`core::sync::atomic::AtomicPrimitive`]: https://doc.rust-lang.org/core/sync/atomic/trait.AtomicPrimitive.html
+[`num-primitive`]: https://crates.io/crates/num-primitive

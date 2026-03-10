@@ -3,8 +3,8 @@ use crate::{
     PrimitiveAtomicUnsigned,
 };
 use core::sync::atomic::{
-    AtomicBool, AtomicI8, AtomicI32, AtomicI64, AtomicIsize, AtomicU8, AtomicU16, AtomicU32,
-    AtomicU64, AtomicUsize, Ordering,
+    AtomicBool, AtomicI8, AtomicI16, AtomicI32, AtomicI64, AtomicIsize, AtomicU8, AtomicU16,
+    AtomicU32, AtomicU64, AtomicUsize, Ordering,
 };
 
 #[test]
@@ -16,7 +16,7 @@ fn test_atomic_primitive_mapping() {
     assert_eq!(a.load(Ordering::Relaxed), 123);
 
     let a: Atomic<bool> = true.to_atomic();
-    assert_eq!(a.load(Ordering::Relaxed), true);
+    assert!(a.load(Ordering::Relaxed));
 
     let a: Atomic<usize> = 999usize.to_atomic();
     assert_eq!(a.load(Ordering::Relaxed), 999);
@@ -67,6 +67,11 @@ fn test_bits_constant() {
     assert_eq!(<AtomicU32 as PrimitiveAtomicInteger>::BITS, 32);
     assert_eq!(<AtomicU64 as PrimitiveAtomicInteger>::BITS, 64);
     assert_eq!(<AtomicUsize as PrimitiveAtomicInteger>::BITS, usize::BITS);
+    assert_eq!(<AtomicI8 as PrimitiveAtomicInteger>::BITS, 8);
+    assert_eq!(<AtomicI16 as PrimitiveAtomicInteger>::BITS, 16);
+    assert_eq!(<AtomicI32 as PrimitiveAtomicInteger>::BITS, 32);
+    assert_eq!(<AtomicI64 as PrimitiveAtomicInteger>::BITS, 64);
+    assert_eq!(<AtomicIsize as PrimitiveAtomicInteger>::BITS, isize::BITS);
 }
 
 #[test]
@@ -106,6 +111,70 @@ fn test_fetch_update() {
     assert_eq!(PrimitiveAtomic::load(&a, Ordering::Relaxed), 15);
 }
 
+#[test]
+fn test_fetch_nand() {
+    let a = AtomicU8::new(0b1100);
+    assert_eq!(
+        PrimitiveAtomic::fetch_nand(&a, 0b1010, Ordering::Relaxed),
+        0b1100
+    );
+    assert_eq!(PrimitiveAtomic::load(&a, Ordering::Relaxed), !0b1000);
+}
+
+#[test]
+fn test_as_ptr() {
+    let a = AtomicU32::new(42);
+    let ptr = PrimitiveAtomic::as_ptr(&a);
+    assert!(!ptr.is_null());
+    // SAFETY: the pointer is valid for the lifetime of `a`.
+    assert_eq!(unsafe { *ptr }, 42);
+}
+
+#[test]
+fn test_compare_exchange_weak() {
+    let a = AtomicU32::new(5);
+    // compare_exchange_weak may spuriously fail, so loop until success.
+    loop {
+        match PrimitiveAtomic::compare_exchange_weak(&a, 5, 10, Ordering::SeqCst, Ordering::SeqCst)
+        {
+            Ok(prev) => {
+                assert_eq!(prev, 5);
+                break;
+            }
+            Err(prev) => {
+                assert_eq!(prev, 5);
+            }
+        }
+    }
+    assert_eq!(PrimitiveAtomic::load(&a, Ordering::Relaxed), 10);
+}
+
+#[test]
+fn test_fetch_max_min() {
+    let a = AtomicI32::new(10);
+    assert_eq!(
+        PrimitiveAtomicInteger::fetch_max(&a, 20, Ordering::Relaxed),
+        10
+    );
+    assert_eq!(PrimitiveAtomic::load(&a, Ordering::Relaxed), 20);
+    assert_eq!(
+        PrimitiveAtomicInteger::fetch_max(&a, 5, Ordering::Relaxed),
+        20
+    );
+    assert_eq!(PrimitiveAtomic::load(&a, Ordering::Relaxed), 20);
+
+    assert_eq!(
+        PrimitiveAtomicInteger::fetch_min(&a, 15, Ordering::Relaxed),
+        20
+    );
+    assert_eq!(PrimitiveAtomic::load(&a, Ordering::Relaxed), 15);
+    assert_eq!(
+        PrimitiveAtomicInteger::fetch_min(&a, 25, Ordering::Relaxed),
+        15
+    );
+    assert_eq!(PrimitiveAtomic::load(&a, Ordering::Relaxed), 15);
+}
+
 fn _assert_primitive_atomic<T: PrimitiveAtomic>() {}
 fn _assert_primitive_atomic_integer<T: PrimitiveAtomicInteger>() {}
 fn _assert_primitive_atomic_signed<T: PrimitiveAtomicSigned>() {}
@@ -123,6 +192,7 @@ fn test_trait_bounds() {
     _assert_primitive_atomic_integer::<AtomicUsize>();
 
     _assert_primitive_atomic_signed::<AtomicI8>();
+    _assert_primitive_atomic_signed::<AtomicI16>();
     _assert_primitive_atomic_signed::<AtomicIsize>();
 
     _assert_primitive_atomic_unsigned::<AtomicU8>();
