@@ -67,20 +67,26 @@ macro_rules! impl_atomic_primitive {
 }
 
 use core::sync::atomic::{
-    AtomicBool, AtomicI8, AtomicI16, AtomicI32, AtomicI64, AtomicIsize, AtomicU8, AtomicU16,
-    AtomicU32, AtomicU64, AtomicUsize,
+    AtomicBool, AtomicI8, AtomicI16, AtomicI32, AtomicIsize, AtomicU8, AtomicU16, AtomicU32,
+    AtomicUsize,
 };
+#[cfg(target_has_atomic = "64")]
+use core::sync::atomic::{AtomicI64, AtomicU64};
 
 impl_atomic_primitive! {
     bool => AtomicBool,
     u8 => AtomicU8,
     u16 => AtomicU16,
     u32 => AtomicU32,
-    u64 => AtomicU64,
     usize => AtomicUsize,
     i8 => AtomicI8,
     i16 => AtomicI16,
     i32 => AtomicI32,
-    i64 => AtomicI64,
     isize => AtomicIsize,
+}
+
+#[cfg(target_has_atomic = "64")]
+impl_atomic_primitive! {
+    u64 => AtomicU64,
+    i64 => AtomicI64,
 }

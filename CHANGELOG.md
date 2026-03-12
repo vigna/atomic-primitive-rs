@@ -1,5 +1,11 @@
 # Change Log
 
+## [0.1.3] 2026-03-12
+
+### Fixed
+
+- Should now compile on all 32-bit supported platforms.
+
 ## [0.1.2] 2026-03-10
 
 ### Changed

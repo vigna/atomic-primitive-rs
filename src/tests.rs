@@ -3,17 +3,22 @@ use crate::{
     PrimitiveAtomicUnsigned,
 };
 use core::sync::atomic::{
-    AtomicBool, AtomicI8, AtomicI16, AtomicI32, AtomicI64, AtomicIsize, AtomicU8, AtomicU16,
-    AtomicU32, AtomicU64, AtomicUsize, Ordering,
+    AtomicBool, AtomicI8, AtomicI16, AtomicI32, AtomicIsize, AtomicU8, AtomicU16, AtomicU32,
+    AtomicUsize, Ordering,
 };
+#[cfg(target_has_atomic = "64")]
+use core::sync::atomic::{AtomicI64, AtomicU64};
 
 #[test]
 fn test_atomic_primitive_mapping() {
     let a: Atomic<u8> = 42u8.to_atomic();
     assert_eq!(a.load(Ordering::Relaxed), 42);
 
-    let a: Atomic<u64> = 123u64.to_atomic();
-    assert_eq!(a.load(Ordering::Relaxed), 123);
+    #[cfg(target_has_atomic = "64")]
+    {
+        let a: Atomic<u64> = 123u64.to_atomic();
+        assert_eq!(a.load(Ordering::Relaxed), 123);
+    }
 
     let a: Atomic<bool> = true.to_atomic();
     assert!(a.load(Ordering::Relaxed));
@@ -24,6 +29,17 @@ fn test_atomic_primitive_mapping() {
 
 #[test]
 fn test_primitive_atomic_basic() {
+    let a = AtomicU32::new(10);
+    assert_eq!(PrimitiveAtomic::load(&a, Ordering::Relaxed), 10);
+    PrimitiveAtomic::store(&a, 20, Ordering::Relaxed);
+    assert_eq!(PrimitiveAtomic::load(&a, Ordering::Relaxed), 20);
+    assert_eq!(PrimitiveAtomic::swap(&a, 30, Ordering::Relaxed), 20);
+    assert_eq!(PrimitiveAtomic::into_inner(a), 30);
+}
+
+#[cfg(target_has_atomic = "64")]
+#[test]
+fn test_primitive_atomic_basic_u64() {
     let a = AtomicU64::new(10);
     assert_eq!(PrimitiveAtomic::load(&a, Ordering::Relaxed), 10);
     PrimitiveAtomic::store(&a, 20, Ordering::Relaxed);
@@ -47,6 +63,22 @@ fn test_primitive_atomic_cas() {
 
 #[test]
 fn test_primitive_atomic_integer() {
+    let a = AtomicU32::new(10);
+    assert_eq!(
+        PrimitiveAtomicInteger::fetch_add(&a, 5, Ordering::Relaxed),
+        10
+    );
+    assert_eq!(PrimitiveAtomic::load(&a, Ordering::Relaxed), 15);
+    assert_eq!(
+        PrimitiveAtomicInteger::fetch_sub(&a, 3, Ordering::Relaxed),
+        15
+    );
+    assert_eq!(PrimitiveAtomic::load(&a, Ordering::Relaxed), 12);
+}
+
+#[cfg(target_has_atomic = "64")]
+#[test]
+fn test_primitive_atomic_integer_u64() {
     let a = AtomicU64::new(10);
     assert_eq!(
         PrimitiveAtomicInteger::fetch_add(&a, 5, Ordering::Relaxed),
@@ -65,11 +97,13 @@ fn test_bits_constant() {
     assert_eq!(<AtomicU8 as PrimitiveAtomicInteger>::BITS, 8);
     assert_eq!(<AtomicU16 as PrimitiveAtomicInteger>::BITS, 16);
     assert_eq!(<AtomicU32 as PrimitiveAtomicInteger>::BITS, 32);
+    #[cfg(target_has_atomic = "64")]
     assert_eq!(<AtomicU64 as PrimitiveAtomicInteger>::BITS, 64);
     assert_eq!(<AtomicUsize as PrimitiveAtomicInteger>::BITS, usize::BITS);
     assert_eq!(<AtomicI8 as PrimitiveAtomicInteger>::BITS, 8);
     assert_eq!(<AtomicI16 as PrimitiveAtomicInteger>::BITS, 16);
     assert_eq!(<AtomicI32 as PrimitiveAtomicInteger>::BITS, 32);
+    #[cfg(target_has_atomic = "64")]
     assert_eq!(<AtomicI64 as PrimitiveAtomicInteger>::BITS, 64);
     assert_eq!(<AtomicIsize as PrimitiveAtomicInteger>::BITS, isize::BITS);
 }
@@ -96,6 +130,14 @@ fn test_fetch_bitwise() {
 
 #[test]
 fn test_get_mut() {
+    let mut a = AtomicU32::new(42);
+    *PrimitiveAtomic::get_mut(&mut a) = 100;
+    assert_eq!(PrimitiveAtomic::load(&a, Ordering::Relaxed), 100);
+}
+
+#[cfg(target_has_atomic = "64")]
+#[test]
+fn test_get_mut_u64() {
     let mut a = AtomicU64::new(42);
     *PrimitiveAtomic::get_mut(&mut a) = 100;
     assert_eq!(PrimitiveAtomic::load(&a, Ordering::Relaxed), 100);
@@ -185,6 +227,7 @@ fn _assert_atomic_primitive<T: AtomicPrimitive>() {}
 fn test_trait_bounds() {
     _assert_primitive_atomic::<AtomicBool>();
     _assert_primitive_atomic::<AtomicU8>();
+    #[cfg(target_has_atomic = "64")]
     _assert_primitive_atomic::<AtomicI64>();
 
     _assert_primitive_atomic_integer::<AtomicU8>();
@@ -199,6 +242,7 @@ fn test_trait_bounds() {
     _assert_primitive_atomic_unsigned::<AtomicUsize>();
 
     _assert_atomic_primitive::<bool>();
+    #[cfg(target_has_atomic = "64")]
     _assert_atomic_primitive::<u64>();
     _assert_atomic_primitive::<usize>();
 }

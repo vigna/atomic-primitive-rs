@@ -7,8 +7,9 @@ use crate::Sealed;
 ///
 /// This encapsulates trait implementations and inherent methods that are common
 /// among all of the primitive atomic types: [`AtomicBool`], [`AtomicU8`],
-/// [`AtomicU16`], [`AtomicU32`], [`AtomicU64`], [`AtomicUsize`], [`AtomicI8`],
-/// [`AtomicI16`], [`AtomicI32`], [`AtomicI64`], and [`AtomicIsize`].
+/// [`AtomicU16`], [`AtomicU32`], [`AtomicUsize`], [`AtomicI8`],
+/// [`AtomicI16`], [`AtomicI32`], [`AtomicIsize`], and, on targets with
+/// 64-bit atomics, [`AtomicU64`] and [`AtomicI64`].
 ///
 /// See the corresponding items on the individual types for more documentation
 /// and examples.
@@ -155,18 +156,22 @@ macro_rules! impl_primitive_atomic {
 }
 
 use core::sync::atomic::{
-    AtomicBool, AtomicI8, AtomicI16, AtomicI32, AtomicI64, AtomicIsize, AtomicU8, AtomicU16,
-    AtomicU32, AtomicU64, AtomicUsize,
+    AtomicBool, AtomicI8, AtomicI16, AtomicI32, AtomicIsize, AtomicU8, AtomicU16, AtomicU32,
+    AtomicUsize,
 };
+#[cfg(target_has_atomic = "64")]
+use core::sync::atomic::{AtomicI64, AtomicU64};
 
 impl_primitive_atomic!(AtomicBool, bool);
 impl_primitive_atomic!(AtomicU8, u8);
 impl_primitive_atomic!(AtomicU16, u16);
 impl_primitive_atomic!(AtomicU32, u32);
-impl_primitive_atomic!(AtomicU64, u64);
 impl_primitive_atomic!(AtomicUsize, usize);
 impl_primitive_atomic!(AtomicI8, i8);
 impl_primitive_atomic!(AtomicI16, i16);
 impl_primitive_atomic!(AtomicI32, i32);
-impl_primitive_atomic!(AtomicI64, i64);
 impl_primitive_atomic!(AtomicIsize, isize);
+#[cfg(target_has_atomic = "64")]
+impl_primitive_atomic!(AtomicU64, u64);
+#[cfg(target_has_atomic = "64")]
+impl_primitive_atomic!(AtomicI64, i64);

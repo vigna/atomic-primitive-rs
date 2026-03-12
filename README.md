@@ -13,9 +13,9 @@ primitive atomic types:
 - [`PrimitiveAtomic`]: [`AtomicBool`] and all atomic integer types;
   - [`PrimitiveAtomicInteger`]: all atomic integer types;
     - [`PrimitiveAtomicSigned`]: [`AtomicI8`], [`AtomicI16`], [`AtomicI32`],
-      [`AtomicI64`], [`AtomicIsize`];
+      [`AtomicIsize`], and on targets with 64-bit atomics, [`AtomicI64`];
     - [`PrimitiveAtomicUnsigned`]: [`AtomicU8`], [`AtomicU16`], [`AtomicU32`],
-      [`AtomicU64`], [`AtomicUsize`].
+      [`AtomicUsize`], and on targets with 64-bit atomics, [`AtomicU64`].
 
 Additionally, [`AtomicPrimitive`] maps non-atomic primitive types to their
 atomic counterparts, mirroring the unstable

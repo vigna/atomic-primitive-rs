@@ -48,17 +48,20 @@ macro_rules! impl_primitive_atomic_integer {
 }
 
 use core::sync::atomic::{
-    AtomicI8, AtomicI16, AtomicI32, AtomicI64, AtomicIsize, AtomicU8, AtomicU16, AtomicU32,
-    AtomicU64, AtomicUsize,
+    AtomicI8, AtomicI16, AtomicI32, AtomicIsize, AtomicU8, AtomicU16, AtomicU32, AtomicUsize,
 };
+#[cfg(target_has_atomic = "64")]
+use core::sync::atomic::{AtomicI64, AtomicU64};
 
 impl_primitive_atomic_integer!(AtomicU8, 8);
 impl_primitive_atomic_integer!(AtomicU16, 16);
 impl_primitive_atomic_integer!(AtomicU32, 32);
-impl_primitive_atomic_integer!(AtomicU64, 64);
 impl_primitive_atomic_integer!(AtomicUsize, usize::BITS);
 impl_primitive_atomic_integer!(AtomicI8, 8);
 impl_primitive_atomic_integer!(AtomicI16, 16);
 impl_primitive_atomic_integer!(AtomicI32, 32);
-impl_primitive_atomic_integer!(AtomicI64, 64);
 impl_primitive_atomic_integer!(AtomicIsize, isize::BITS);
+#[cfg(target_has_atomic = "64")]
+impl_primitive_atomic_integer!(AtomicU64, 64);
+#[cfg(target_has_atomic = "64")]
+impl_primitive_atomic_integer!(AtomicI64, 64);
