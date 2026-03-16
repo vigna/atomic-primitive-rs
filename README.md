@@ -1,9 +1,11 @@
 # atomic-primitive
 
-[![crate](https://img.shields.io/crates/v/atomic-primitive.svg)](https://crates.io/crates/atomic-primitive)
-[![documentation](https://docs.rs/atomic-primitive/badge.svg)](https://docs.rs/atomic-primitive)
-[![minimum rustc 1.85](https://img.shields.io/badge/rustc-1.85+-red.svg)](https://rust-lang.github.io/rfcs/2495-min-rust-version.html)
-[![build status](https://github.com/vigna/atomic-primitive-rs/workflows/ci/badge.svg)](https://github.com/vigna/atomic-primitive-rs/actions)
+[![crates.io](https://img.shields.io/crates/v/atomic-primitive.svg)](https://crates.io/crates/atomic-primitive)
+[![docs.rs](https://docs.rs/atomic-primitive/badge.svg)](https://docs.rs/atomic-primitive)
+[![rustc](https://img.shields.io/badge/rustc-1.85+-red.svg)](https://rust-lang.github.io/rfcs/2495-min-rust-version.html)
+[![CI](https://github.com/vigna/atomic-primitive-rs/actions/workflows/ci.yml/badge.svg)](https://github.com/vigna/atomic-primitive-rs/actions)
+![license](https://img.shields.io/crates/l/atomic-primitive)
+[![downloads](https://img.shields.io/crates/d/atomic-primitive)](https://crates.io/crates/atomic-primitive)
 
 Traits for primitive atomic types in Rust.
 
